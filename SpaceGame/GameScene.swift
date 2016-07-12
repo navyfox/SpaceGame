@@ -8,19 +8,24 @@
 
 import SpriteKit
 
-class GameScene: SKScene  {
+class GameScene: SKScene, SKPhysicsContactDelegate  {
+    
+    let spaceShipCategory: UInt32 = 0x1 << 0
+    let asteroidCategory: UInt32 = 0x1 << 1
+    
+    // создаем свойства
+    var spaceShip: SKSpriteNode!
   
-  // создаем свойства
-  var spaceShip: SKSpriteNode!
-  var background: SKSpriteNode!
   
   override func didMoveToView(view: SKView) {
+    physicsWorld.contactDelegate = self
+    physicsWorld.gravity = CGVector(dx: 0.0, dy: -0.8)
     
     //создаем фон
     let width = UIScreen.mainScreen().bounds.size.width  //frame.size.width
     let height = UIScreen.mainScreen().bounds.size.height
     
-    background = SKSpriteNode(imageNamed: "background")
+    let background = SKSpriteNode(imageNamed: "background")
     background.position = CGPoint(x: width / 2, y: height / 2)
     background.size = CGSize(width: width, height: height)
     addChild(background)
@@ -28,9 +33,12 @@ class GameScene: SKScene  {
     //Создаем космический корабль и определяем начальную позицию на экране
     spaceShip = SKSpriteNode(imageNamed: "spaceShip")
     spaceShip.position = CGPoint(x: 200, y: 200)
-    
     spaceShip.physicsBody = SKPhysicsBody(texture: spaceShip.texture!, size: spaceShip.size)
     spaceShip.physicsBody?.dynamic = false
+    
+    spaceShip.physicsBody?.categoryBitMask = spaceShipCategory
+    spaceShip.physicsBody?.collisionBitMask = asteroidCategory
+    spaceShip.physicsBody?.contactTestBitMask = asteroidCategory
     
     addChild(spaceShip)
     
@@ -40,7 +48,7 @@ class GameScene: SKScene  {
         self.addChild(asteroid)
     }
     
-    let asteroidCreateDeley = SKAction.waitForDuration(1.0 / 500, withRange: 0.5)
+    let asteroidCreateDeley = SKAction.waitForDuration(1.0, withRange: 0.5)
     let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreateDeley])
     let asteroidRunAction = SKAction.repeatActionForever(asteroidSequenceAction)
     runAction(asteroidRunAction)
@@ -94,6 +102,10 @@ class GameScene: SKScene  {
     asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
     asteroid.name = "asteroid"
     
+    asteroid.physicsBody?.categoryBitMask = asteroidCategory
+    asteroid.physicsBody?.collisionBitMask = spaceShipCategory
+    asteroid.physicsBody?.contactTestBitMask = spaceShipCategory
+    
     return asteroid
     
   }
@@ -114,5 +126,13 @@ class GameScene: SKScene  {
                 asteroid.removeFromParent()
             }
         }
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+    }
+    
+    func didEndContact(contact: SKPhysicsContact) {
+        
     }
 }
