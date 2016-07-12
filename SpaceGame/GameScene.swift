@@ -15,6 +15,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     // создаем свойства
     var spaceShip: SKSpriteNode!
+    var score = 0
+    var scoreLabel: SKLabelNode!
   
   
   override func didMoveToView(view: SKView) {
@@ -48,13 +50,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         self.addChild(asteroid)
     }
     
-    let asteroidCreateDeley = SKAction.waitForDuration(1.0, withRange: 0.5)
+    let asteroidPerSecond: Double = 1
+    let asteroidCreateDeley = SKAction.waitForDuration(1.0 / asteroidPerSecond, withRange: 0.5)
     let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreateDeley])
     let asteroidRunAction = SKAction.repeatActionForever(asteroidSequenceAction)
     runAction(asteroidRunAction)
     
+    scoreLabel = SKLabelNode(text: "Score: \(score)")
+    scoreLabel.position = CGPoint(x: frame.size.width / 2, y: frame.size.height - scoreLabel.calculateAccumulatedFrame().height - 15)
+    addChild(scoreLabel)
+    
     background.zPosition = 0
     spaceShip.zPosition = 1
+    scoreLabel.zPosition = 3
   }
   
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -87,6 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
   func createAnAsteroid() -> SKSpriteNode{
     
     let asteroid = SKSpriteNode(imageNamed: "asteroid2")
+    asteroid.zPosition = 2
     
     //меняем масштаб астеройдов в пределах 0.2-0.5 от их исходного размера
     //asteroid.setScale = 0.5 // as option
@@ -103,7 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     asteroid.name = "asteroid"
     
     asteroid.physicsBody?.categoryBitMask = asteroidCategory
-    asteroid.physicsBody?.collisionBitMask = spaceShipCategory
+    asteroid.physicsBody?.collisionBitMask = spaceShipCategory | asteroidCategory
     asteroid.physicsBody?.contactTestBitMask = spaceShipCategory
     
     return asteroid
@@ -124,12 +133,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         enumerateChildNodesWithName("asteroid") { (asteroid: SKNode, stop: UnsafeMutablePointer<ObjCBool>) in
             if asteroid.position.y < 0 {
                 asteroid.removeFromParent()
+                
+                self.score += 1
+                self.scoreLabel.text = "Score: \(self.score)"
             }
         }
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        
+        if contact.bodyA.categoryBitMask == spaceShipCategory && contact.bodyB.categoryBitMask == asteroidCategory || contact.bodyB.categoryBitMask == spaceShipCategory && contact.bodyA.categoryBitMask == asteroidCategory {
+            self.score = 0
+            self.scoreLabel.text = "Score: \(self.score)"
+        }
     }
     
     func didEndContact(contact: SKPhysicsContact) {
