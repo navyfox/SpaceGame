@@ -34,6 +34,17 @@ class GameScene: SKScene  {
     
     addChild(spaceShip)
     
+    //Генерируем астероиды
+    let asteroidCreateAction = SKAction.runBlock { () -> Void in
+        let asteroid = self.createAnAsteroid()
+        self.addChild(asteroid)
+    }
+    
+    let asteroidCreateDeley = SKAction.waitForDuration(1.0, withRange: 0.5)
+    let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreateDeley])
+    let asteroidRunAction = SKAction.repeatActionForever(asteroidSequenceAction)
+    runAction(asteroidRunAction)
+    
     background.zPosition = 0
     spaceShip.zPosition = 1
   }
@@ -76,9 +87,9 @@ class GameScene: SKScene  {
   override func update(currentTime: NSTimeInterval) {
     
     //works 60 times per second
-    let asteroid = createAnAsteroid()
-    asteroid.zPosition = 2
-    addChild(asteroid)
+//    let asteroid = createAnAsteroid()
+//    asteroid.zPosition = 2
+//    addChild(asteroid)
     
   }
 }
