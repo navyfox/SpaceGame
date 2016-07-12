@@ -40,7 +40,7 @@ class GameScene: SKScene  {
         self.addChild(asteroid)
     }
     
-    let asteroidCreateDeley = SKAction.waitForDuration(1.0, withRange: 0.5)
+    let asteroidCreateDeley = SKAction.waitForDuration(1.0 / 500, withRange: 0.5)
     let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreateDeley])
     let asteroidRunAction = SKAction.repeatActionForever(asteroidSequenceAction)
     runAction(asteroidRunAction)
@@ -92,7 +92,7 @@ class GameScene: SKScene  {
     asteroid.position.y = frame.size.height + asteroid.size.height
     
     asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
-    
+    asteroid.name = "asteroid"
     
     return asteroid
     
@@ -106,4 +106,13 @@ class GameScene: SKScene  {
 //    addChild(asteroid)
     
   }
+    
+    
+    override func didSimulatePhysics() {
+        enumerateChildNodesWithName("asteroid") { (asteroid: SKNode, stop: UnsafeMutablePointer<ObjCBool>) in
+            if asteroid.position.y < 0 {
+                asteroid.removeFromParent()
+            }
+        }
+    }
 }
