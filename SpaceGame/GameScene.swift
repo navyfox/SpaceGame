@@ -1,3 +1,4 @@
+
 //
 //  GameScene.swift
 //  SpaceGame
@@ -14,6 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     let asteroidCategory: UInt32 = 0x1 << 1
     
     // создаем свойства
+    var background: SKSpriteNode!
     var spaceShip: SKSpriteNode!
     var score = 0
     var scoreLabel: SKLabelNode!
@@ -27,9 +29,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     let width = UIScreen.mainScreen().bounds.size.width  //frame.size.width
     let height = UIScreen.mainScreen().bounds.size.height
     
-    let background = SKSpriteNode(imageNamed: "background")
+    background = SKSpriteNode(imageNamed: "background")
     background.position = CGPoint(x: width / 2, y: height / 2)
-    background.size = CGSize(width: width, height: height)
+    background.size = CGSize(width: width + 8, height: height + 12)
     addChild(background)
     
     //Создаем космический корабль и определяем начальную позицию на экране
@@ -78,6 +80,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
         
         spaceShip.runAction(moveAction)
+        
+        let bgMoveAction = SKAction.moveTo(CGPoint(x: -touchLocation.x / 100 + frame.size.width / 2, y: -touchLocation.y / 100 + frame.size.height / 2 ), duration: time)
+        background.runAction(bgMoveAction)
       
     }
   }
