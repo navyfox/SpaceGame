@@ -49,4 +49,30 @@ class GameScene: SKScene  {
       
     }
   }
+  
+  func createAnAsteroid() -> SKSpriteNode{
+    
+    let asteroid = SKSpriteNode(imageNamed: "asteroid2")
+    
+    //меняем масштаб астеройдов в пределах 0.2-0.5 от их исходного размера
+    //asteroid.setScale = 0.5 // as option
+    asteroid.xScale = 0.5
+    asteroid.yScale = 0.5
+    
+    //устанавливаем позицию образования астеройдов
+    asteroid.position.x = CGFloat(arc4random()) % frame.size.width
+    asteroid.position.y = frame.size.height
+    
+    return asteroid
+    
+  }
+  
+  override func update(currentTime: NSTimeInterval) {
+    
+    //works 60 times per second
+    let asteroid = createAnAsteroid()
+    asteroid.zPosition = 2
+    addChild(asteroid)
+    
+  }
 }
