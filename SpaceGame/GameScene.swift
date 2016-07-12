@@ -70,8 +70,10 @@ class GameScene: SKScene  {
     
     //меняем масштаб астеройдов в пределах 0.2-0.5 от их исходного размера
     //asteroid.setScale = 0.5 // as option
-    asteroid.xScale = 0.5
-    asteroid.yScale = 0.5
+    let randomScale = CGFloat(arc4random() % 4 + 2) / 10
+    
+    asteroid.xScale = randomScale
+    asteroid.yScale = randomScale
     
     //устанавливаем позицию образования астеройдов
     asteroid.position.x = CGFloat(arc4random()) % frame.size.width
