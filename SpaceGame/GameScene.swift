@@ -52,18 +52,30 @@ class GameScene: SKScene  {
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     
     if let touch = touches.first {
-      
-      // определяем точку прикосновения с экраном
-      let touchLocation = touch.locationInNode(self)
-      
-      let moveAction = SKAction.moveTo(touchLocation, duration: 1)
-      moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
-      
-      spaceShip.runAction(moveAction)
+        // определяем точку прикосновения с экраном
+        let touchLocation = touch.locationInNode(self)
+        
+        let distance = distanceCalc(spaceShip.position, b: touchLocation)
+        let speed: CGFloat = 500
+        let time = timeToTravelDistance(distance, speed: speed)
+        let moveAction = SKAction.moveTo(touchLocation, duration: time)
+        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
+        
+        spaceShip.runAction(moveAction)
       
     }
   }
   
+    func distanceCalc(a: CGPoint, b: CGPoint) -> CGFloat {
+        return sqrt((b.x - a.x)*(b.x - a.x) + (b.y - a.y)*(b.y - a.y))
+    }
+    
+    func timeToTravelDistance(distance: CGFloat, speed: CGFloat) -> NSTimeInterval {
+        let time = distance / speed
+        return NSTimeInterval(time)
+    }
+    
+    
   func createAnAsteroid() -> SKSpriteNode{
     
     let asteroid = SKSpriteNode(imageNamed: "asteroid2")
