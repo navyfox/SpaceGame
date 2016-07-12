@@ -16,6 +16,7 @@ class GameViewController: UIViewController {
     @IBAction func pauseButtonPressed(sender: AnyObject) {
         gameScene.pauseButtonPressed(sender)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

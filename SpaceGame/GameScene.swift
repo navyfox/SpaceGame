@@ -21,11 +21,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     var scoreLabel: SKLabelNode!
     var asteroidLayer: SKNode!
     var gameIsPaused: Bool = false
+    var starLayer: SKNode!
 
     func pauseTheGame() {
         gameIsPaused = true
         self.asteroidLayer.paused = true
         physicsWorld.speed = 0
+        self.starLayer.paused = true
     }
 
     func pauseButtonPressed(sender: AnyObject) {
@@ -39,6 +41,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func unpauseTheGame(){
         gameIsPaused = false
         self.asteroidLayer.paused = false
+        self.starLayer.paused = false
         physicsWorld.speed = 1
     }
 
@@ -66,6 +69,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         background.position = CGPoint(x: width / 2, y: height / 2)
         background.size = CGSize(width: width + 8, height: height + 12)
         addChild(background)
+
+        //слой звезд
+        let starsPatch = NSBundle.mainBundle().pathForResource("stars", ofType: "sks")!
+        let starsEmitter = NSKeyedUnarchiver.unarchiveObjectWithFile(starsPatch) as! SKEmitterNode
+
+        starsEmitter.position = CGPoint(x: CGRectGetMidX(frame), y: CGRectGetHeight(frame))
+        starsEmitter.particlePositionRange.dx = CGRectGetWidth(frame)
+        starsEmitter.advanceSimulationTime(10)
+
+        starLayer = SKNode()
+        starLayer.zPosition = 1
+        addChild(starLayer)
+
+        starLayer.addChild(starsEmitter)
 
         //Создаем космический корабль и определяем начальную позицию на экране
         spaceShip = SKSpriteNode(imageNamed: "spaceShip")
@@ -100,8 +117,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         addChild(scoreLabel)
 
         background.zPosition = 0
-        spaceShip.zPosition = 1
-        scoreLabel.zPosition = 3
+        spaceShip.zPosition = 3
+        scoreLabel.zPosition = 4
     }
 
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
