@@ -28,6 +28,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         physicsWorld.speed = 0
     }
 
+    func pauseButtonPressed(sender: AnyObject) {
+        if !gameIsPaused {
+            pauseTheGame()
+        } else {
+            unpauseTheGame()
+        }
+    }
+
     func unpauseTheGame(){
         gameIsPaused = false
         self.asteroidLayer.paused = false
@@ -112,11 +120,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
 
                 let bgMoveAction = SKAction.moveTo(CGPoint(x: -touchLocation.x / 100 + frame.size.width / 2, y: -touchLocation.y / 100 + frame.size.height / 2 ), duration: time)
                 background.runAction(bgMoveAction)
-
-                self.asteroidLayer.paused = !self.asteroidLayer.paused
-                physicsWorld.speed = 0
-
-                pauseTheGame()
                 
             }
         }
