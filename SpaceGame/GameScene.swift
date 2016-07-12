@@ -29,6 +29,9 @@ class GameScene: SKScene  {
     spaceShip = SKSpriteNode(imageNamed: "spaceShip")
     spaceShip.position = CGPoint(x: 200, y: 200)
     
+    spaceShip.physicsBody = SKPhysicsBody(texture: spaceShip.texture!, size: spaceShip.size)
+    spaceShip.physicsBody?.dynamic = false
+    
     addChild(spaceShip)
     
     background.zPosition = 0
@@ -61,7 +64,10 @@ class GameScene: SKScene  {
     
     //устанавливаем позицию образования астеройдов
     asteroid.position.x = CGFloat(arc4random()) % frame.size.width
-    asteroid.position.y = frame.size.height
+    asteroid.position.y = frame.size.height + asteroid.size.height
+    
+    asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
+    
     
     return asteroid
     
