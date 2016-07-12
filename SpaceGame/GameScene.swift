@@ -19,6 +19,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     var spaceShip: SKSpriteNode!
     var score = 0
     var scoreLabel: SKLabelNode!
+    
+    var asteroidLayer: SKNode!
   
   
   override func didMoveToView(view: SKView) {
@@ -50,16 +52,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     addChild(spaceShip)
     
     //Генерируем астероиды
+    asteroidLayer = SKNode()
+    asteroidLayer.zPosition = 2
+    addChild(asteroidLayer)
+    
     let asteroidCreateAction = SKAction.runBlock { () -> Void in
         let asteroid = self.createAnAsteroid()
-        self.addChild(asteroid)
+        self.asteroidLayer.addChild(asteroid)
     }
     
     let asteroidPerSecond: Double = 1
     let asteroidCreateDeley = SKAction.waitForDuration(1.0 / asteroidPerSecond, withRange: 0.5)
     let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreateDeley])
     let asteroidRunAction = SKAction.repeatActionForever(asteroidSequenceAction)
-    runAction(asteroidRunAction)
+    self.asteroidLayer.runAction(asteroidRunAction)
     
     scoreLabel = SKLabelNode(text: "Score: \(score)")
     scoreLabel.position = CGPoint(x: frame.size.width / 2, y: frame.size.height - scoreLabel.calculateAccumulatedFrame().height - 15)
@@ -86,6 +92,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         
         let bgMoveAction = SKAction.moveTo(CGPoint(x: -touchLocation.x / 100 + frame.size.width / 2, y: -touchLocation.y / 100 + frame.size.height / 2 ), duration: time)
         background.runAction(bgMoveAction)
+        
+        self.asteroidLayer.paused = !self.asteroidLayer.paused
+        physicsWorld.speed = 0
       
     }
   }
@@ -145,7 +154,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     
     override func didSimulatePhysics() {
-        enumerateChildNodesWithName("asteroid") { (asteroid: SKNode, stop: UnsafeMutablePointer<ObjCBool>) in
+        asteroidLayer.enumerateChildNodesWithName("asteroid") { (asteroid: SKNode, stop: UnsafeMutablePointer<ObjCBool>) in
             if asteroid.position.y < 0 {
                 asteroid.removeFromParent()
                 
