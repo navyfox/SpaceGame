@@ -22,6 +22,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
   
   
   override func didMoveToView(view: SKView) {
+    
+    srand48(time(nil))
+    
     physicsWorld.contactDelegate = self
     physicsWorld.gravity = CGVector(dx: 0.0, dy: -0.8)
     
@@ -99,7 +102,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
   func createAnAsteroid() -> SKSpriteNode{
     
-    let asteroid = SKSpriteNode(imageNamed: "asteroid2")
+    let asteroidImageArray = ["asteroid", "asteroid2"]
+    let randomIndex = Int(arc4random()) % asteroidImageArray.count
+    
+    let asteroid = SKSpriteNode(imageNamed: asteroidImageArray[randomIndex])
     asteroid.zPosition = 2
     
     //меняем масштаб астеройдов в пределах 0.2-0.5 от их исходного размера
@@ -119,6 +125,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     asteroid.physicsBody?.categoryBitMask = asteroidCategory
     asteroid.physicsBody?.collisionBitMask = spaceShipCategory | asteroidCategory
     asteroid.physicsBody?.contactTestBitMask = spaceShipCategory
+    
+    asteroid.physicsBody?.angularVelocity = CGFloat(drand48() * 2 - 1) * 3
+    let asteroidSpeedX: CGFloat = 100
+    asteroid.physicsBody?.velocity.dx = CGFloat(drand48() * 2 - 1) * asteroidSpeedX
     
     return asteroid
     
