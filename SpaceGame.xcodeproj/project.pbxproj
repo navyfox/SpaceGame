@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		206A91091D359B6E00AB7EF3 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 206A91071D359B6E00AB7EF3 /* spark.png */; };
 		206A910A1D359B6E00AB7EF3 /* stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = 206A91081D359B6E00AB7EF3 /* stars.sks */; };
+		209D6BA31D365E31008393CE /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 209D6BA21D365E31008393CE /* fire.sks */; };
 		350B153A1B8E16850024A245 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 350B15391B8E16850024A245 /* AppDelegate.swift */; };
 		350B153C1B8E16850024A245 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 350B153B1B8E16850024A245 /* GameScene.sks */; };
 		350B153E1B8E16850024A245 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 350B153D1B8E16850024A245 /* GameScene.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		206A91071D359B6E00AB7EF3 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		206A91081D359B6E00AB7EF3 /* stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = stars.sks; sourceTree = "<group>"; };
+		209D6BA21D365E31008393CE /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
 		350B15361B8E16850024A245 /* SpaceGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		350B15391B8E16850024A245 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		350B153B1B8E16850024A245 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				350B15461B8E16850024A245 /* LaunchScreen.storyboard */,
 				350B15491B8E16850024A245 /* Info.plist */,
 				206A91071D359B6E00AB7EF3 /* spark.png */,
+				209D6BA21D365E31008393CE /* fire.sks */,
 				206A91081D359B6E00AB7EF3 /* stars.sks */,
 			);
 			path = SpaceGame;
@@ -136,6 +139,7 @@
 				206A91091D359B6E00AB7EF3 /* spark.png in Resources */,
 				206A910A1D359B6E00AB7EF3 /* stars.sks in Resources */,
 				350B153C1B8E16850024A245 /* GameScene.sks in Resources */,
+				209D6BA31D365E31008393CE /* fire.sks in Resources */,
 				350B15481B8E16850024A245 /* LaunchScreen.storyboard in Resources */,
 				350B15451B8E16850024A245 /* Assets.xcassets in Resources */,
 				350B15431B8E16850024A245 /* Main.storyboard in Resources */,

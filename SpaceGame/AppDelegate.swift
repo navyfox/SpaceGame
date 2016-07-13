@@ -1,9 +1,9 @@
 //
-//  AppDelegate.swift
+//  GameViewController.swift
 //  SpaceGame
 //
 //  Created by p1us on 26.08.15.
-//  Copyright © 2015 Ivan Akulov. All rights reserved.
+//  Copyright (c) 2015 Ivan Akulov. All rights reserved.
 //
 
 import UIKit
