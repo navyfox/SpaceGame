@@ -1,56 +1,78 @@
-
 //
 //  GameScene.swift
 //  SpaceGame
 //
-//  Created by p1us on 26.08.15.
-//  Copyright (c) 2015 Ivan Akulov. All rights reserved.
+//  Created by Игорь Михайлович Ракитянский on 13.07.16.
+//  Copyright (c) 2016 Игорь Михайлович Ракитянский. All rights reserved.
 //
 
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate  {
 
-    let spaceShipCategory: UInt32 = 0x1 << 0
-    let asteroidCategory: UInt32 = 0x1 << 1
+    let spaceShipCategory: UInt32 = 0x1 << 0  //0000000.01
+    let asteroidCategory: UInt32 = 0x1 << 1   //000000..10
 
     // создаем свойства
-    var background: SKSpriteNode!
     var spaceShip: SKSpriteNode!
+    var background: SKSpriteNode!
+
     var score = 0
     var scoreLabel: SKLabelNode!
-    var asteroidLayer: SKNode!
-    var gameIsPaused: Bool = false
-    var starLayer: SKNode!
 
+    //слой астеройдов
+    var asteroidLayer: SKNode!
+
+    //слой звезд
+    var starsLayer: SKNode!
+
+    //индикатор паузы игры
+    var gameIsPaused: Bool = false
+
+    //функции паузы/снятия пазуы/резета
     func pauseTheGame() {
+
         gameIsPaused = true
+
         self.asteroidLayer.paused = true
         physicsWorld.speed = 0
-        self.starLayer.paused = true
+
+        self.starsLayer.paused = true
+
     }
 
     func pauseButtonPressed(sender: AnyObject) {
+
         if !gameIsPaused {
             pauseTheGame()
         } else {
             unpauseTheGame()
         }
+
     }
 
-    func unpauseTheGame(){
+    func unpauseTheGame() {
+
         gameIsPaused = false
+
         self.asteroidLayer.paused = false
-        self.starLayer.paused = false
         physicsWorld.speed = 1
+
+        self.starsLayer.paused = false
+
     }
 
-    func resetTheGame() {
+    func resetTheGame(){
+
         score = 0
         scoreLabel.text = "Score: \(score)"
+
         gameIsPaused = false
+
         self.asteroidLayer.paused = false
+        self.starsLayer.paused = false
         physicsWorld.speed = 1
+
     }
 
 
@@ -70,19 +92,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         background.size = CGSize(width: width + 8, height: height + 12)
         addChild(background)
 
-        //слой звезд
-        let starsPatch = NSBundle.mainBundle().pathForResource("stars", ofType: "sks")!
-        let starsEmitter = NSKeyedUnarchiver.unarchiveObjectWithFile(starsPatch) as! SKEmitterNode
+        //создаем слой звезд
 
+        let starsPath = NSBundle.mainBundle().pathForResource("stars", ofType: "sks")!
+        let starsEmitter = NSKeyedUnarchiver.unarchiveObjectWithFile(starsPath) as! SKEmitterNode
+
+        starsEmitter.zPosition = 1
         starsEmitter.position = CGPoint(x: CGRectGetMidX(frame), y: CGRectGetHeight(frame))
         starsEmitter.particlePositionRange.dx = CGRectGetWidth(frame)
         starsEmitter.advanceSimulationTime(10)
 
-        starLayer = SKNode()
-        starLayer.zPosition = 1
-        addChild(starLayer)
+        //addChild(starsEmitter)
 
-        starLayer.addChild(starsEmitter)
+        starsLayer = SKNode()
+        starsLayer.zPosition = 1
+        addChild(starsLayer)
+
+        starsLayer.addChild(starsEmitter)
 
         //Создаем космический корабль и определяем начальную позицию на экране
         spaceShip = SKSpriteNode(imageNamed: "spaceShip")
@@ -94,9 +120,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         spaceShip.physicsBody?.collisionBitMask = asteroidCategory
         spaceShip.physicsBody?.contactTestBitMask = asteroidCategory
 
+        let colorAction1 = SKAction.colorizeWithColor(UIColor.yellowColor(), colorBlendFactor: 1, duration: 1)
+        let colorAction2 = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0, duration: 1)
+        let colorSequenceAnimation = SKAction.sequence([colorAction1, colorAction2])
+        let colorActionRepeat = SKAction.repeatActionForever(colorSequenceAnimation)
+        spaceShip.runAction(colorActionRepeat)
         addChild(spaceShip)
 
-        //Генерируем астероиды
+        //Генерируем астеройды
         asteroidLayer = SKNode()
         asteroidLayer.zPosition = 2
         addChild(asteroidLayer)
@@ -106,10 +137,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             self.asteroidLayer.addChild(asteroid)
         }
 
-        let asteroidPerSecond: Double = 1
-        let asteroidCreateDeley = SKAction.waitForDuration(1.0 / asteroidPerSecond, withRange: 0.5)
-        let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreateDeley])
+        let asteroidsPerSecond: Double = 1
+        let asteroidCreationDelay = SKAction.waitForDuration(1.0 / asteroidsPerSecond, withRange: 0.5)
+        let asteroidSequenceAction = SKAction.sequence([asteroidCreateAction, asteroidCreationDelay])
         let asteroidRunAction = SKAction.repeatActionForever(asteroidSequenceAction)
+
         self.asteroidLayer.runAction(asteroidRunAction)
 
         scoreLabel = SKLabelNode(text: "Score: \(score)")
@@ -121,49 +153,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         scoreLabel.zPosition = 4
     }
 
+    //функция, срабатывающая при касании экрана
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+
         if !gameIsPaused {
             if let touch = touches.first {
+
                 // определяем точку прикосновения с экраном
                 let touchLocation = touch.locationInNode(self)
 
+                //вычисляем дистанцию до точки прикосновения и время полета до точки прикосновения
                 let distance = distanceCalc(spaceShip.position, b: touchLocation)
-                let speed: CGFloat = 500
+                let speed: CGFloat = 600
                 let time = timeToTravelDistance(distance, speed: speed)
                 let moveAction = SKAction.moveTo(touchLocation, duration: time)
                 moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
 
                 spaceShip.runAction(moveAction)
 
-                let bgMoveAction = SKAction.moveTo(CGPoint(x: -touchLocation.x / 100 + frame.size.width / 2, y: -touchLocation.y / 100 + frame.size.height / 2 ), duration: time)
+                let bgMoveAction = SKAction.moveTo(CGPoint(x: -touchLocation.x / 80 + frame.size.width / 2, y: -touchLocation.y / 80 + frame.size.height / 2), duration: time)
+
                 background.runAction(bgMoveAction)
-                
             }
         }
     }
 
+    //функция подсчета дистанции
     func distanceCalc(a: CGPoint, b: CGPoint) -> CGFloat {
         return sqrt((b.x - a.x)*(b.x - a.x) + (b.y - a.y)*(b.y - a.y))
     }
 
+    //функция подсчета времени полета
     func timeToTravelDistance(distance: CGFloat, speed: CGFloat) -> NSTimeInterval {
         let time = distance / speed
         return NSTimeInterval(time)
     }
 
-
     func createAnAsteroid() -> SKSpriteNode{
 
         let asteroidImageArray = ["asteroid", "asteroid2"]
         let randomIndex = Int(arc4random()) % asteroidImageArray.count
-
         let asteroid = SKSpriteNode(imageNamed: asteroidImageArray[randomIndex])
-        asteroid.zPosition = 2
 
         //меняем масштаб астеройдов в пределах 0.2-0.5 от их исходного размера
-        //asteroid.setScale = 0.5 // as option
         let randomScale = CGFloat(arc4random() % 4 + 2) / 10
-
         asteroid.xScale = randomScale
         asteroid.yScale = randomScale
 
@@ -171,6 +204,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         asteroid.position.x = CGFloat(arc4random()) % frame.size.width
         asteroid.position.y = frame.size.height + asteroid.size.height
 
+        //присваиваем астеройду физическое тело
         asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
         asteroid.name = "asteroid"
 
@@ -186,33 +220,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
 
     }
 
+    //срабатывает 60 раз в секунду (60fps)
     override func update(currentTime: NSTimeInterval) {
 
-        //works 60 times per second
         //    let asteroid = createAnAsteroid()
-        //    asteroid.zPosition = 2
         //    addChild(asteroid)
 
     }
 
 
     override func didSimulatePhysics() {
-        asteroidLayer.enumerateChildNodesWithName("asteroid") { (asteroid: SKNode, stop: UnsafeMutablePointer<ObjCBool>) in
+        
+        asteroidLayer.enumerateChildNodesWithName("asteroid") { (asteroid: SKNode, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
             if asteroid.position.y < 0 {
                 asteroid.removeFromParent()
-
+                
                 self.score += 1
                 self.scoreLabel.text = "Score: \(self.score)"
             }
         }
     }
     
+    //функция столкновения двух тел
     func didBeginContact(contact: SKPhysicsContact) {
+        
         if contact.bodyA.categoryBitMask == spaceShipCategory && contact.bodyB.categoryBitMask == asteroidCategory || contact.bodyB.categoryBitMask == spaceShipCategory && contact.bodyA.categoryBitMask == asteroidCategory {
             self.score = 0
             self.scoreLabel.text = "Score: \(self.score)"
         }
+        
+        print("asteroid hits spaceship")
+        
     }
+    
     
     func didEndContact(contact: SKPhysicsContact) {
         
