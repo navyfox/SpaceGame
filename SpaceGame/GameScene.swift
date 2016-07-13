@@ -144,7 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let fireEmiter = NSKeyedUnarchiver.unarchiveObjectWithFile(firePath!) as! SKEmitterNode
         fireEmiter.zPosition = 0
         fireEmiter.position.y = -40
-        fireEmiter.targetNode = self
+//        fireEmiter.targetNode = self
         spaceShipLayer.addChild(fireEmiter)
 
 

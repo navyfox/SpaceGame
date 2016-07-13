@@ -41,6 +41,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
+        <!--Pause View Controller-->
+        <scene sceneID="U4D-gO-8Sh">
+            <objects>
+                <viewController storyboardIdentifier="pauseViewController" id="t97-Fl-FMU" customClass="PauseViewController" customModule="SpaceGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="C2Q-xC-V0H"/>
+                        <viewControllerLayoutGuide type="bottom" id="ggj-Cw-u8U"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="A6f-1V-uYG">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.026641299948096275" green="0.040509738028049469" blue="0.017418906092643738" alpha="0.60189494680851063" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sPe-8r-MBn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1027" y="335"/>
+        </scene>
     </scenes>
     <resources>
         <image name="pauseBtn" width="40" height="40"/>

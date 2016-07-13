@@ -12,13 +12,20 @@ import SpriteKit
 class GameViewController: UIViewController {
 
     var gameScene: GameScene!
+    var pauseViewController: UIViewController!
 
     @IBAction func pauseButtonPressed(sender: AnyObject) {
         gameScene.pauseButtonPressed(sender)
+
+        showPauseScreen(pauseViewController)
+
+        //presentViewController(pauseViewController, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        pauseViewController = storyboard?.instantiateViewControllerWithIdentifier("pauseViewController")
 
         if let scene = GameScene(fileNamed:"GameScene") {
             // Configure the view.
@@ -37,6 +44,12 @@ class GameViewController: UIViewController {
             scene.size = UIScreen.mainScreen().bounds.size
             skView.presentScene(scene)
         }
+    }
+
+    func showPauseScreen(viewController: UIViewController) {
+        addChildViewController(viewController)
+        view.addSubview(viewController.view)
+        viewController.view.frame = view.bounds
     }
 
     override func shouldAutorotate() -> Bool {

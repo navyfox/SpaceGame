@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2013A20B1D368B070083B3DC /* PauseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2013A20A1D368B070083B3DC /* PauseViewController.swift */; };
 		206A91091D359B6E00AB7EF3 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 206A91071D359B6E00AB7EF3 /* spark.png */; };
 		206A910A1D359B6E00AB7EF3 /* stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = 206A91081D359B6E00AB7EF3 /* stars.sks */; };
 		209D6BA31D365E31008393CE /* fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 209D6BA21D365E31008393CE /* fire.sks */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2013A20A1D368B070083B3DC /* PauseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PauseViewController.swift; sourceTree = "<group>"; };
 		206A91071D359B6E00AB7EF3 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		206A91081D359B6E00AB7EF3 /* stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = stars.sks; sourceTree = "<group>"; };
 		209D6BA21D365E31008393CE /* fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fire.sks; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				350B153D1B8E16850024A245 /* GameScene.swift */,
 				350B153F1B8E16850024A245 /* GameViewController.swift */,
 				350B15411B8E16850024A245 /* Main.storyboard */,
+				2013A20A1D368B070083B3DC /* PauseViewController.swift */,
 				350B15441B8E16850024A245 /* Assets.xcassets */,
 				350B15461B8E16850024A245 /* LaunchScreen.storyboard */,
 				350B15491B8E16850024A245 /* Info.plist */,
@@ -154,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				350B153E1B8E16850024A245 /* GameScene.swift in Sources */,
+				2013A20B1D368B070083B3DC /* PauseViewController.swift in Sources */,
 				350B15401B8E16850024A245 /* GameViewController.swift in Sources */,
 				350B153A1B8E16850024A245 /* AppDelegate.swift in Sources */,
 			);
